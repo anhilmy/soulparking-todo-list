@@ -1,7 +1,6 @@
-import json
 from flask import Flask, Response, jsonify, request
 from flask.views import MethodView
-from error.error import ValidationError
+from component.error import ValidationError
 
 from model.todo_list import TodoListModel
 
@@ -35,7 +34,7 @@ class ItemTodoListController(MethodView):
             return jsonify({"data": {}, "message": FAILED_MSG}), 400
 
         todo.update(**body)
-        return jsonify({"data": {"id": todo.id}, "message": SUCCESS_MSG}), 201
+        return jsonify({"data": {"id": todo.id}, "message": SUCCESS_MSG}), 200
 
     def delete(self, id):
         item = self.model.get_by_id(id)
@@ -70,8 +69,28 @@ class GroupTodoListController(MethodView):
         return jsonify({"data": {"id": todo_inst.id}, "message": SUCCESS_MSG}), 201
 
 
+class DoneTodoListController(MethodView):
+    init_every_request = False
+
+    def __init__(self, model):
+        self.model = model
+
+    def post(self, id):
+        try:
+            todo = self.model.get_by_id(id)
+            if not todo:
+                raise TypeError("Not Found")
+        except TypeError:
+            return jsonify({"data": {}, "message": FAILED_MSG}), 400
+
+        todo.complete()
+        return jsonify({"data": {"id": todo.id}, "message": SUCCESS_MSG}), 200
+
+
 def register_todo_list(app: Flask):
     item_todo = ItemTodoListController.as_view(f"todo-item", TodoListModel)
     group_todo = GroupTodoListController.as_view(f"group-todo", TodoListModel)
+    complete_todo = DoneTodoListController.as_view("completed_todo", TodoListModel)
     app.add_url_rule(f"/todo/<int:id>", view_func=item_todo)
     app.add_url_rule(f"/todo/", view_func=group_todo)
+    app.add_url_rule(f"/todo/<int:id>/complete", view_func=complete_todo)
