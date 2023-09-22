@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from error.error import ValidationError
+from component.error import ValidationError
 
 
 class TodoListModel:
@@ -16,7 +16,13 @@ class TodoListModel:
         self.description = description
         self.created_at = datetime.now()
 
-    def done(self):
+    def _format_attribute_time(self, attribute_name):
+        if not hasattr(self, attribute_name):
+            return None
+
+        return getattr(self, attribute_name).strftime("%d-%m-%Y %H:%M:%S")
+
+    def complete(self):
         self.updated_at = datetime.now()
         self.finished_at = datetime.now()
 
@@ -35,10 +41,10 @@ class TodoListModel:
             "id": self.id,
             "title": self.title,
             "description": self.description,
-            "created_at": self.created_at,
-            "finished_at": getattr(self, "finished_at", None),
-            "updated_at": getattr(self, "updated_at", None),
-            "deleted_at": getattr(self, "deleted_at", None),
+            "created_at": self._format_attribute_time("created_at"),
+            "finished_at": self._format_attribute_time("finished_at"),
+            "updated_at": self._format_attribute_time("updated_at"),
+            "deleted_at": self._format_attribute_time("deleted_at"),
         }
 
     # class method
