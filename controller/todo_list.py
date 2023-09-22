@@ -93,4 +93,4 @@ def register_todo_list(app: Flask):
     complete_todo = DoneTodoListController.as_view("completed_todo", TodoListModel)
     app.add_url_rule(f"/todo/<int:id>", view_func=item_todo)
     app.add_url_rule(f"/todo/", view_func=group_todo)
-    app.add_url_rule(f"/todo/<int:id>/complete", view_func=complete_todo)
+    app.add_url_rule(f"/todo/<int:id>/finish", view_func=complete_todo)
