@@ -1,4 +1,4 @@
-from flask import Flask, Response, jsonify, request
+from flask import Flask, Response, jsonify, request, Blueprint
 from flask.views import MethodView
 from component.error import ValidationError
 
@@ -87,10 +87,14 @@ class DoneTodoListController(MethodView):
         return jsonify({"data": {"id": todo.id}, "message": SUCCESS_MSG}), 200
 
 
-def register_todo_list(app: Flask):
+def register_todo_list():
+    blueprint = Blueprint("todo_list", __name__, url_prefix="/todo")
+
     item_todo = ItemTodoListController.as_view(f"todo-item", TodoListModel)
     group_todo = GroupTodoListController.as_view(f"group-todo", TodoListModel)
     complete_todo = DoneTodoListController.as_view("completed_todo", TodoListModel)
-    app.add_url_rule(f"/todo/<int:id>", view_func=item_todo)
-    app.add_url_rule(f"/todo/", view_func=group_todo)
-    app.add_url_rule(f"/todo/<int:id>/finish", view_func=complete_todo)
+    blueprint.add_url_rule(f"/<int:id>", view_func=item_todo)
+    blueprint.add_url_rule(f"/", view_func=group_todo)
+    blueprint.add_url_rule(f"/<int:id>/finish", view_func=complete_todo)
+
+    return blueprint

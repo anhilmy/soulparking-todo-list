@@ -18,7 +18,7 @@ def index():
     return jsonify({"message": "helloyuesss!"})
 
 
-register_todo_list(app)
+app.register_blueprint(register_todo_list())
 
 if __name__ == "__main__":
     app.run(debug=config["DEBUG"])
