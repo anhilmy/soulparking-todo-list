@@ -16,13 +16,13 @@
 
 | Attribute   	| Description   	|
 |-------------	|---------------	|
-| Id          	| Unique Id     	|
-| title       	|               	|
-| description 	|               	|
-| finished_at 	| Finished time 	|
-| created_at  	| Created time  	|
-| updated_at  	| Updated time  	|
-| deleted_at  	| Deleted_time  	|
+| Id          	| Unique,        	|
+| title       	| Required       	|
+| description 	| Optional         	|
+| finished_at 	| Autofilled    	|
+| created_at  	| Autofilled      	|
+| updated_at  	| Autofilled      	|
+| deleted_at  	| Autofilled      	|
 
 
 ## Requirements
