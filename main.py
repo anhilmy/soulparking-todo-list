@@ -15,7 +15,7 @@ app = Flask(__name__)
 
 @app.route("/")
 def index():
-    return jsonify({"message": "helloyuesss!"})
+    return jsonify({"message": "welcome!"})
 
 
 app.register_blueprint(register_todo_list())

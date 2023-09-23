@@ -51,7 +51,7 @@ class TodoListModel:
     @classmethod
     def get_by_id(cls, id):
         for instance in cls.__data:
-            if id == instance.id:
+            if id == instance.id and (not hasattr(instance, "deleted_at")):
                 return instance
         return None
 
